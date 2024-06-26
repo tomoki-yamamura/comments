@@ -23,8 +23,14 @@ export default function FeedbackForm({ onAddToList }: FeedbackFormProps) {
 
     if (text.includes("#") && text.length >= 5) {
       setShowValidIndicator(true)
+      setTimeout(() => {
+        setShowValidIndicator(false)
+      }, 2000);
     } else {
       setShowInValidIndicator(true)
+      setTimeout(() => {
+        setShowInValidIndicator(false)
+      }, 2000);
       return
     }
     onAddToList(text);
