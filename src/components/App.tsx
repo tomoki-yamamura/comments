@@ -8,25 +8,22 @@ function App() {
   const [feedbackItems, setFeedbackItems] = useState<TFeedbackItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [selectedCompany, setSelectedCompany] = useState("Amazon");
+  const [selectedCompany, setSelectedCompany] = useState("");
 
   const filteredFeedbackItems = useMemo(
     () =>
       selectedCompany
-        ? feedbackItems.filter(
-          (item) => item.company === selectedCompany
-        )
+        ? feedbackItems.filter((item) => item.company === selectedCompany)
         : feedbackItems,
-    [feedbackItems, selectedCompany]
-  )
+    [feedbackItems, selectedCompany],
+  );
 
   const companyList = useMemo(
     () =>
       feedbackItems
         .map((item) => item.company)
-        .filter((company, index, array) => array.indexOf(company) === index)
-    ,
-    [feedbackItems]
+        .filter((company, index, array) => array.indexOf(company) === index),
+    [feedbackItems],
   );
   const handleAddToList = async (text: string) => {
     const companyName = text
