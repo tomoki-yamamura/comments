@@ -1,19 +1,38 @@
-import { useState, useEffect } from 'react'
-import { TFeedbackItem } from '../lib/types'
-import Container from './Container'
-import Footer from './Footer'
-import HashtagList from './HashtagList'
+import { useState, useEffect, useMemo } from "react";
+import { TFeedbackItem } from "../lib/types";
+import Container from "./layout/Container";
+import Footer from "./layout/Footer";
+import HashtagList from "./hashtags/HashtagList";
 
 function App() {
-  const [feedbackItems, setFeedbackItems] = useState<TFeedbackItem[]>([])
-  const [isLoading, setIsLoading] = useState(false)
-  const [errorMessage, setErrorMessage] = useState("")
+  const [feedbackItems, setFeedbackItems] = useState<TFeedbackItem[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [selectedCompany, setSelectedCompany] = useState("Amazon");
 
+  const filteredFeedbackItems = useMemo(
+    () =>
+      selectedCompany
+        ? feedbackItems.filter(
+          (item) => item.company === selectedCompany
+        )
+        : feedbackItems,
+    [feedbackItems, selectedCompany]
+  )
+
+  const companyList = useMemo(
+    () =>
+      feedbackItems
+        .map((item) => item.company)
+        .filter((company, index, array) => array.indexOf(company) === index)
+    ,
+    [feedbackItems]
+  );
   const handleAddToList = async (text: string) => {
     const companyName = text
       .split(" ")
-      .find(word => word.includes("#"))!
-      .substring(1)
+      .find((word) => word.includes("#"))!
+      .substring(1);
 
     const newItem: TFeedbackItem = {
       id: new Date().getTime(),
@@ -22,26 +41,29 @@ function App() {
       company: companyName,
       text: text,
       daysAgo: 0,
-    }
-    setFeedbackItems(prev => [...prev, newItem])
-    await fetch("https://bytegrad.com/course-assets/projects/corpcomment/api/feedbacks", {
-      method: "POST",
-      body: JSON.stringify(newItem),
-      headers: {
-        Accrept: "application/json",
-        "Content-Type": "application/json",
-      }
-    })
-  }
+    };
+    setFeedbackItems((prev) => [...prev, newItem]);
+    await fetch(
+      "https://bytegrad.com/course-assets/projects/corpcomment/api/feedbacks",
+      {
+        method: "POST",
+        body: JSON.stringify(newItem),
+        headers: {
+          Accrept: "application/json",
+          "Content-Type": "application/json",
+        },
+      },
+    );
+  };
 
   useEffect(() => {
     const fetchFeedbackItems = async () => {
-      setIsLoading(true)
+      setIsLoading(true);
 
       try {
         const response = await fetch(
-          "https://bytegrad.com/course-assets/projects/corpcomment/api/feedbacks"
-        )
+          "https://bytegrad.com/course-assets/projects/corpcomment/api/feedbacks",
+        );
 
         if (!response.ok) {
           throw new Error();
@@ -49,27 +71,34 @@ function App() {
 
         const data = await response.json();
 
-        setFeedbackItems(data.feedbacks)
+        setFeedbackItems(data.feedbacks);
       } catch (error) {
-        setErrorMessage("Something went erong")
+        setErrorMessage("Something went erong");
       }
-      setIsLoading(false)
-    }
+      setIsLoading(false);
+    };
     fetchFeedbackItems();
-  }, [])
+  }, []);
+
+  const handleSelectedCompany = (company: string) => {
+    setSelectedCompany(company);
+  };
 
   return (
-    <div className='app'>
+    <div className="app">
       <Footer />
       <Container
         handleAddToList={handleAddToList}
-        feedbackItems={feedbackItems}
+        feedbackItems={filteredFeedbackItems}
         isLoading={isLoading}
         errorMessage={errorMessage}
       />
-      <HashtagList />
+      <HashtagList
+        handleSelectedCompany={handleSelectedCompany}
+        companyList={companyList}
+      />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

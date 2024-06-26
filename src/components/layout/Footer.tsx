@@ -5,5 +5,5 @@ export default function Footer() {
         <p>&copy; Copyright by Tomoki. Intended for learning</p>
       </small>
     </footer>
-  )
+  );
 }

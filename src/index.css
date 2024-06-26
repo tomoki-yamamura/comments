@@ -171,7 +171,9 @@ h1 *::selection {
   border-radius: 6px;
   overflow: hidden;
   position: relative;
-  transition: background-color 0.2s, box-shadow 0.2s;
+  transition:
+    background-color 0.2s,
+    box-shadow 0.2s;
 }
 
 .form:hover,

@@ -4,5 +4,5 @@ export default function PageHeading() {
       Give feedback.
       <span>Publicity.</span>
     </h1>
-  )
+  );
 }
