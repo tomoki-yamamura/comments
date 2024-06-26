@@ -1,5 +1,8 @@
 export default function PageHeading() {
   return (
-    <div>PageHeading</div>
+    <h1>
+      Give feedback.
+      <span>Publicity.</span>
+    </h1>
   )
 }
