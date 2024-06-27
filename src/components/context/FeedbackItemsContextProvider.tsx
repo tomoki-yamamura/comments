@@ -1,6 +1,6 @@
 import { createContext, useMemo, useState } from "react";
-import { useFeedbackItms } from "../../lib/hooks";
-import { TFeedbackItem } from "../../lib/types";
+import { useFeedbackItms } from "../lib/hooks";
+import { TFeedbackItem } from "../lib/types";
 
 type TFeedbackItemsContext = {
   filteredFeedbackItems: TFeedbackItem[];
@@ -77,8 +77,6 @@ export default function FeedbackItemsContextProvider({
       },
     );
   };
-
-
 
   return (
     <FeedbackItemsContext.Provider
